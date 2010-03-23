@@ -1,0 +1,52 @@
+<h1>Idea Board</h1>
+
+<h2>Ideas and issues recently updated this month.</h2>
+
+<% unless @ideas.blank? %>
+<% @ideas.each do |idea| %>
+<div class="ideas_list yui-gb">
+  <ul>
+    <li class="item yui-u <%= status_indicator(idea.status) %>">
+
+    <h3>Idea/Issue<%= idea.description %></h3>
+
+    <% unless idea.notes.blank? %>
+      Notes <%= idea.notes %>
+    <% end %>
+
+    <% unless author_nick(idea).blank? %>
+      Author: <%= author_link(author_nick(idea)) %>
+    <% end %>
+
+    <% unless idea.user.nil? %>
+      Championed by: <%= author_link(idea.user.user_name) %><br />
+    <% end %>
+
+    Updated: <%= idea.updated_at.strftime("%B %d, %Y") %><br />
+
+    <%= link_to 'View', idea %>
+    <%= link_to 'Update', edit_idea_path(idea) if authorized? %>
+    <%= link_to 'Destroy', idea, :confirm => 'Are you sure?', :method => :delete if authorized? %>
+    </li>
+  </ul>
+</div>
+<% end %>
+
+<br />
+<% else %>
+  Nothing is posted yet. Why don't you post one? :)
+<% end %>
+
+<%= link_to 'Post-It!', new_idea_path %><br />
+
+<%= link_to 'Users', users_path %> |
+<% if current_user %>
+  <%= link_to 'Logout', logout_path %>
+<% end %>
+
+<% unless current_user %>
+  <%= link_to 'Signup', signup_path %> |
+  <%= link_to 'Login', login_path %>
+<% end %>
+
+
